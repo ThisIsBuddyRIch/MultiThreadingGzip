@@ -24,34 +24,30 @@ namespace MultiThreadingGzipCompressor
 
         public void Read()
         {
-            var count = 0;
+            
             using (var reader = new BinaryReader(File.Open(_filename, FileMode.Open)))
             {
                 while (true)
                 {
+                    var arr = reader.ReadBytes(Constants.bufferSize);
+
+                    if (arr.Length == 0)
+                    {
+                        return;
+                    }
+
                     Monitor.Enter(_sync);
                     if (ChunckQueue.IsFull())
                     {
-                        Monitor.Exit(_sync);
-                        Thread.Sleep(Constants.threadSleep);
-
+                        ChunckQueue.QueueIsFull = true;
+                        Console.WriteLine("Уснул на переменной");
+                        Monitor.Wait(_sync);
                     }
-                    else
-                    {
-                        Monitor.Exit(_sync);
-                        var arr = reader.ReadBytes(Constants.bufferSize);
-                       
-                        if (arr.Length == 0)
-                        {
-                            return;
-                        }
 
-                        Monitor.Enter(_sync);
-                        ChunckQueue.Enqueue(new Chunck { Data = arr });
-                        count++;
-                        Monitor.Exit(_sync);
-                    }
+                    ChunckQueue.Enqueue(new Chunck { Data = arr });
+                    Monitor.Exit(_sync);
                 }
+                
             }
 
         }

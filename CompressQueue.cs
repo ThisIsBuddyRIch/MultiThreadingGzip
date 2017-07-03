@@ -11,6 +11,8 @@ namespace MultiThreadingGzipCompressor
         private List<Chunck> _list = new List<Chunck>();
         private int _size;
 
+        public bool QueueIsFull { get; set; }
+
         public ChunckQueue(int size)
         {
             _size = size;
@@ -46,6 +48,11 @@ namespace MultiThreadingGzipCompressor
         public Chunck GetUncompressChunck()
         {
             return _list.FirstOrDefault(x => x.State == ChunckState.NoCompress);
+        }
+
+        public int Count
+        {
+            get { return _list.Count; }
         }
     }
 }

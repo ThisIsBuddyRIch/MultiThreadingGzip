@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="Chunck.cs" />
     <Compile Include="ChunckReadFromFile.cs" />
+    <Compile Include="Compressor.cs" />
     <Compile Include="CompressQueue.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
